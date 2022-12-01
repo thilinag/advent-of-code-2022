@@ -2,7 +2,7 @@ https://adventofcode.com/2022
 
 # How to run
 - `cd` into a day
-- `node part1.mjs` or `node part2.mjs`
+- `node solution.mjs`
 - using latest node features, use node >= 18
 
 # Why .mjs
