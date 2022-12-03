@@ -4,10 +4,11 @@ const data = input.split("\n");
 
 const part1 = (rucksacks) => {
   const rucksackCommonItems = rucksacks.map((rucksack) => {
-    const allItems = rucksack.split("");
-    const firstCompartment = allItems.slice(0, allItems.length / 2);
-    const secondCompartment = allItems.slice(allItems.length / 2);
-    return firstCompartment.find((item) => secondCompartment.includes(item));
+    const firstCompartment = rucksack.substr(0, rucksack.length / 2);
+    const secondCompartment = rucksack.substr(rucksack.length / 2);
+    return firstCompartment
+      .split("")
+      .find((item) => secondCompartment.indexOf(item) > -1);
   });
   const itemPriorities = rucksackCommonItems.map((item) => {
     return item.charCodeAt() - (/[a-z]/.test(item) ? 96 : 38);
