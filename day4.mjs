@@ -4,10 +4,12 @@ const data = input.split("\n");
 
 const part1 = (data) => {
   const overlappingPairs = data.filter((task) => {
-    const tasks = task.split(",").map((r) => r.split("-").map(Number));
+    const [[elf1Start, elf1End], [elf2Start, elf2End]] = task
+      .split(",")
+      .map((r) => r.split("-").map(Number));
     return (
-      (tasks[0][0] <= tasks[1][0] && tasks[0][1] >= tasks[1][1]) ||
-      (tasks[1][0] <= tasks[0][0] && tasks[1][1] >= tasks[0][1])
+      (elf1Start <= elf2Start && elf1End >= elf2End) ||
+      (elf2Start <= elf1Start && elf2End >= elf1End)
     );
   });
 
@@ -16,8 +18,10 @@ const part1 = (data) => {
 
 const part2 = (data) => {
   const nonOverlappingPairs = data.filter((task) => {
-    const tasks = task.split(",").map((r) => r.split("-").map(Number));
-    return !(tasks[0][1] < tasks[1][0] || tasks[1][1] < tasks[0][0]);
+    const [[elf1Start, elf1End], [elf2Start, elf2End]] = task
+      .split(",")
+      .map((r) => r.split("-").map(Number));
+    return !(elf1End < elf2Start || elf2End < elf1Start);
   });
 
   console.log(nonOverlappingPairs.length);
