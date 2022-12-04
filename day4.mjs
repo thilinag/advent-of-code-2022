@@ -15,12 +15,12 @@ const part1 = (data) => {
 };
 
 const part2 = (data) => {
-  const overlappingPairs = data.filter((task) => {
+  const nonOverlappingPairs = data.filter((task) => {
     const tasks = task.split(",").map((r) => r.split("-").map(Number));
     return !(tasks[0][1] < tasks[1][0] || tasks[1][1] < tasks[0][0]);
   });
 
-  console.log(overlappingPairs.length);
+  console.log(nonOverlappingPairs.length);
 };
 
 part1(data);
