@@ -19,15 +19,11 @@ const getMarker = (sequence) => {
 };
 
 const part1 = (data) => {
-  const sequence = 4;
-
-  console.log(getMarker(sequence));
+  console.log(getMarker(4));
 };
 
 const part2 = (data) => {
-  const sequence = 14;
-
-  console.log(getMarker(sequence));
+  console.log(getMarker(14));
 };
 
 part1(data);
