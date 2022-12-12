@@ -90,7 +90,7 @@ const part2 = (data) => {
     const cycleIntersection = sprite.indexOf((cycle - 1) % rowLength);
     // if intersection the screen produces a lit pixel (#);
     // otherwise, the screen leaves the pixel dark (.).
-    crtRows[row].push(cycleIntersection > -1 ? "#" : ".");
+    crtRows[row].push(cycleIntersection > -1 ? "🟨" : "⬛");
 
     cycle++;
   } while (buffer > 0); // run till all buffer tasks are complete
