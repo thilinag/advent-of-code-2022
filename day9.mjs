@@ -2,171 +2,111 @@ import { readFileSync } from "fs";
 const input = readFileSync("./input.txt", { encoding: "utf8" });
 const data = input.split("\n");
 
-const part1 = (data) => {
-  const tailPositions = [];
-  let headPosition = [0, 0];
-  let turnCount = 1;
+const getTailPositions = (knots) => {
+  // create placeholder for knot positions
+  const knotPositions = Array.from(Array(knots), () => [[0, 0]]);
+  let knot = 0;
   for (const instruction of data) {
     const [direction, turns] = instruction.split(" ");
     for (let i = 1; i <= Number(turns); i++) {
-      const [x, y] = headPosition;
-      const [tx, ty] = tailPositions.at(-1) || [0, 0];
+      const [x, y] = knotPositions[knot].at(-1);
 
-      // const b = [...tailPositions];
-      // for (let i = 0; i <= 5; i++) {
+      // move head
+      switch (direction) {
+        case "R":
+          knotPositions[knot].push([x + 1, y]);
+          break;
+        case "D":
+          knotPositions[knot].push([x, y - 1]);
+          break;
+        case "L":
+          knotPositions[knot].push([x - 1, y]);
+          break;
+        case "U":
+          knotPositions[knot].push([x, y + 1]);
+          break;
+      }
+
+      // move tails (head is knot 0)
+      for (let k = 1; k < knots; k++) {
+        const [x, y] = knotPositions[k - 1].at(-1);
+        const [tx, ty] = knotPositions[k].at(-1);
+        const d = Math.max(Math.abs(tx - x), Math.abs(ty - y));
+        if (d > 1) {
+          if (ty === y) {
+            // go horizontal
+            knotPositions[k].push([
+              (knotPositions[k].at(-1)[0] += x > tx ? 1 : -1),
+              ty,
+            ]);
+          } else if (tx == x) {
+            // go vertical
+            knotPositions[k].push([
+              tx,
+              (knotPositions[k].at(-1)[1] += y > ty ? 1 : -1),
+            ]);
+          } else {
+            // go diagonal
+            knotPositions[k].push([
+              (knotPositions[k].at(-1)[0] += x > tx ? 1 : -1),
+              (knotPositions[k].at(-1)[1] += y > ty ? 1 : -1),
+            ]);
+          }
+        }
+      }
+
+      // visualize
+      // const c = knotPositions.map((t) => `${t.at(-1)[0]}-${t.at(-1)[1]}`);
+      // const max = Math.max(
+      //   ...knotPositions.map((t) => Math.max(...t.map((u) => Math.max(...u))))
+      // );
+
+      // for (let i = 0; i <= max; i++) {
       //   let a = "";
-      //   for (let j = 0; j <= 5; j++) {
-      //     if (x === i && y === j) {
-      //       a += "H";
-      //     } else if (tx === i && ty === j) {
-      //       a += "T";
+      //   for (let j = 0; j <= max; j++) {
+      //     const b = c.indexOf(`${i}-${j}`);
+      //     const lastIndex = c.length - 1;
+      //     if (b > -1) {
+      //       switch (b) {
+      //         case 0:
+      //           a += "H";
+      //           break;
+      //         case lastIndex:
+      //           a += "T";
+      //           break;
+      //         default:
+      //           a += b;
+      //       }
       //     } else {
       //       a += ".";
       //     }
       //   }
       //   console.log(a);
       // }
-      // console.log(`---${turnCount}----------------`);
-
-      switch (direction) {
-        case "R":
-          headPosition = [x + 1, y];
-          if (Math.abs(tx - (x + 1)) > 1 || Math.abs(ty - y) > 1) {
-            tailPositions.push([x, y]);
-          }
-          break;
-        case "D":
-          headPosition = [x, y - 1];
-          if (Math.abs(tx - x) > 1 || Math.abs(ty - (y - 1)) > 1) {
-            tailPositions.push([x, y]);
-          }
-          break;
-        case "L":
-          headPosition = [x - 1, y];
-          if (Math.abs(tx - (x - 1)) > 1 || Math.abs(ty - y) > 1) {
-            tailPositions.push([x, y]);
-          }
-          break;
-        case "U":
-          headPosition = [x, y + 1];
-          if (Math.abs(tx - x) > 1 || Math.abs(ty - (y + 1)) > 1) {
-            tailPositions.push([x, y]);
-          }
-          break;
-      }
-      turnCount++;
+      // console.log(`-------------------`);
     }
   }
-  const uniqueTailPositions = new Set([
-    ...tailPositions.map(([x, y]) => `${x}-${y}`),
-  ]);
-  console.log(uniqueTailPositions.size + 1);
+
+  return knotPositions;
+};
+
+const getUniqueTailPositions = (knots) => {
+  const tailPositions = getTailPositions(knots);
+
+  // How many positions does the tail of the rope visit at least once?
+  // adding 1 for the starting position
+  return (
+    new Set([...tailPositions.at(-1).map(([x, y]) => `${x}-${y}`)]).size + 1
+  );
+};
+
+const part1 = (knots) => {
+  console.log(getUniqueTailPositions(knots));
 };
 
 const part2 = (knots) => {
-  const tailPositions = Array(knots - 1).fill([[0, 0]]);
-  console.log(tailPositions);
-  let currentKnot = 0;
-
-  let headPosition = [0, 0];
-
-  // console.log(headPosition);
-  // let turnCount = 1;
-  for (const instruction of data) {
-    const [direction, turns] = instruction.split(" ");
-    for (let i = 1; i <= Number(turns); i++) {
-      const [x, y] = headPosition;
-      // const [tx, ty] = tailPositions[currentKnot]?.at(-1) || [0, 0];
-      // if (!tailPositions[currentKnot]) {
-      //   tailPositions.push([
-      //     tailPositions[currentKnot - 1]?.at(-1) || [0, 0],
-      //   ]);
-      // }
-
-      // const b = [...tailPositions];
-      // for (let i = 0; i <= 5; i++) {
-      //   let a = "";
-      //   for (let j = 0; j <= 5; j++) {
-      //     if (x === i && y === j) {
-      //       a += "H";
-      //     } else if (tx === i && ty === j) {
-      //       a += "T";
-      //     } else {
-      //       a += ".";
-      //     }
-      //   }
-      //   console.log(a);
-      // }
-      // console.log(`---${turnCount}----------------`);
-
-      switch (direction) {
-        case "R":
-          headPosition = [x + 1, y];
-          let knot = 0;
-          do {
-            let [tx, ty] = tailPositions[knot - 1]?.at(-1) || [0, 0];
-            if (Math.abs(tx - (x + 1)) > 1 || Math.abs(ty - y) > 1) {
-              tailPositions[knot] = [
-                ...(tailPositions[knot] || []),
-                ...(knot === 0 ? [[x, y]] : [[tx, ty]]),
-              ];
-            }
-            knot++;
-          } while (knot < knots - 1);
-          break;
-        case "D":
-          headPosition = [x, y - 1];
-          if (Math.abs(tx - x) > 1 || Math.abs(ty - (y - 1)) > 1) {
-            tailPositions[currentKnot] = [
-              ...(tailPositions[currentKnot] || []),
-              [x, y],
-            ];
-          }
-          break;
-        case "L":
-          headPosition = [x - 1, y];
-          if (Math.abs(tx - (x - 1)) > 1 || Math.abs(ty - y) > 1) {
-            tailPositions[currentKnot] = [
-              ...(tailPositions[currentKnot] || []),
-              [x, y],
-            ];
-          }
-          break;
-        case "U":
-          headPosition = [x, y + 1];
-          if (Math.abs(tx - x) > 1 || Math.abs(ty - (y + 1)) > 1) {
-            tailPositions[currentKnot] = [
-              ...(tailPositions[currentKnot] || []),
-              [x, y],
-            ];
-          }
-          break;
-      }
-      // turnCount++;
-    }
-  }
-
-  console.log({ currentKnot, headPosition }, JSON.stringify(tailPositions));
-
-  // while (currentKnot < knots - 1) {
-  //   if (tailPositions.length === 0) {
-  //     tailPositions.push([[0, 0]]);
-  //   }
-  //   // let headPosition = tailPositions[currentKnot - 1]?.[0] || [0, 0];
-
-  //   console.log({ roundtail: JSON.stringify(tailPositions) });
-
-  //   currentKnot++;
-  // }
-
-  // console.log(tailPositions);
-
-  // const uniqueTailPositions = new Set([
-  //   ...tailPositions[0].map(([x, y]) => `${x}-${y}`),
-  // ]);
-  // console.log(uniqueTailPositions.size);
+  console.log(getUniqueTailPositions(knots));
 };
 
-part1(data);
-part2(3);
-//6248
+part1(2);
+part2(10);
