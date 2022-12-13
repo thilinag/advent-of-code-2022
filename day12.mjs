@@ -4,8 +4,10 @@ let start, end;
 
 const getCharValue = (char) => char.charCodeAt();
 
-const data = input.split("\n").map((row, rowIndex) =>
-  row.split("").map((char, colIndex) => {
+const data = input.split("\n").map((row) => [...row]);
+
+const dataAsNumbers = data.map((row, rowIndex) =>
+  row.map((char, colIndex) => {
     if (char === "S") {
       start = [rowIndex, colIndex];
       return 0;
@@ -146,19 +148,41 @@ const getPath = (matrix, part2, start, end = null) => {
 
   // backtrack on visited nodes till we find the destination
   while (currentKey !== startKey) {
-    path.push(currentKey.split("-").map(Number));
+    //const [currentRow, currentCol] = currentKey.split("-").map(Number);
+    path.push(currentKey);
     currentKey = visited[currentKey].key;
   }
 
-  return path.length;
+  return path;
+};
+
+const drawPath = (matrix, path, part2 = false) => {
+  for (let row = 0; row < matrix.length; row++) {
+    const pathPoints = [];
+    let rowLine = "";
+    for (let col = 0; col < matrix[row].length; col++) {
+      const current = matrix[row][col];
+      if (path.includes(`${row}-${col}`) || (!part2 && current === "S")) {
+        pathPoints.push(current);
+        rowLine += "\x1b[41m%s\x1b[0m";
+      } else {
+        rowLine += current;
+      }
+    }
+    console.log(rowLine, ...pathPoints);
+  }
 };
 
 const part1 = () => {
-  console.log(getPath(data, false, start, end));
+  const path = getPath(dataAsNumbers, false, start, end);
+  drawPath(data, path);
+  console.log(path.length);
 };
 
 const part2 = () => {
-  console.log(getPath(data, true, end));
+  const path = getPath(dataAsNumbers, true, end);
+  drawPath(data, path, true);
+  console.log(path.length);
 };
 
 part1(data);
