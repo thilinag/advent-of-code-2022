@@ -157,16 +157,38 @@ const getPath = (matrix, part2, start, end = null) => {
 };
 
 const drawPath = (matrix, path, part2 = false) => {
+  const colors = [
+    "\x1b[42m",
+    "\x1b[43m",
+    "\x1b[44m",
+    "\x1b[46m",
+    "\x1b[41m",
+    "\x1b[47m",
+  ];
   for (let row = 0; row < matrix.length; row++) {
     const pathPoints = [];
     let rowLine = "";
     for (let col = 0; col < matrix[row].length; col++) {
       const current = matrix[row][col];
+      pathPoints.push(current);
       if (path.includes(`${row}-${col}`) || (!part2 && current === "S")) {
-        pathPoints.push(current);
-        rowLine += "\x1b[41m%s\x1b[0m";
+        rowLine += "\x1b[40m%s\x1b[0m";
       } else {
-        rowLine += current;
+        let color = colors[0];
+        const currentChar = current.charCodeAt() - "a".charCodeAt();
+        if (currentChar > 22) {
+          color = colors[5];
+        } else if (currentChar > 12) {
+          color = colors[4];
+        } else if (currentChar > 5) {
+          color = colors[3];
+        } else if (currentChar > 2) {
+          color = colors[2];
+        } else if (currentChar > 1) {
+          color = colors[1];
+        }
+
+        rowLine += `${color}%s\x1b[0m`;
       }
     }
     console.log(rowLine, ...pathPoints);
