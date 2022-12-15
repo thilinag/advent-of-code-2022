@@ -42,13 +42,15 @@ const getRocks = (data) => {
   return rocks;
 };
 
-const drawSimulation = (rocks, restrictedKeys) => {
+const drawSimulation = (rocks, restrictedKeys, part2 = false) => {
   const flatData = data.flat();
   const rowPoints = flatData.map((point) => point[1]);
-  const scanRowCount = Math.max(...rowPoints) + 1;
+  const scanRowCount = Math.max(...rowPoints) + (!part2 ? 1 : 2);
   const columnPoints = flatData.map((point) => point[0]);
-  const scanColumnStart = Math.min(...columnPoints);
-  const scanColumnEnd = Math.max(...columnPoints);
+  const scanColumnStart = !part2
+    ? Math.min(...columnPoints)
+    : 500 - scanRowCount;
+  const scanColumnEnd = !part2 ? Math.max(...columnPoints) : 500 + scanRowCount;
 
   for (let i = 0; i < scanRowCount; i++) {
     let line = "";
@@ -63,6 +65,10 @@ const drawSimulation = (rocks, restrictedKeys) => {
       }
     }
     console.log(line);
+  }
+
+  if (part2) {
+    console.log("#".repeat(scanRowCount * 2 + 1));
   }
 };
 
@@ -118,7 +124,7 @@ const part1 = (data) => {
     sandUnit++;
   }
 
-  // drawSimulation(rocks, restrictedKeys);
+  drawSimulation(rocks, restrictedKeys);
   // How many units of sand come to rest before sand starts
   // flowing into the abyss below?
   // (remove 1 since it fell into the abyss)
@@ -182,6 +188,7 @@ const part2 = (data) => {
     sandUnit++;
   }
 
+  drawSimulation(rocks, restrictedKeys, true);
   // simulate the falling sand until the source of the sand becomes blocked.
   // How many units of sand come to rest?
   // (remove 1 since it blocked the source)
