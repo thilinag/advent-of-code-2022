@@ -1,5 +1,9 @@
 import { readFileSync } from "fs";
-const input = readFileSync("./input.txt", { encoding: "utf8" });
+import path from "path";
+import { fileURLToPath } from "url";
+
+const inputFileName = path.basename(fileURLToPath(import.meta.url), ".mjs");
+const input = readFileSync(`./${inputFileName}.txt`, { encoding: "utf8" });
 const data = input.split("\n").map((row) => row.split("").map(Number));
 
 const isCovered = (treeRow, currentTreeHeight) =>

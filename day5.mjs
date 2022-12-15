@@ -1,5 +1,9 @@
 import { readFileSync } from "fs";
-const input = readFileSync("./input.txt", { encoding: "utf8" });
+import path from "path";
+import { fileURLToPath } from "url";
+
+const inputFileName = path.basename(fileURLToPath(import.meta.url), ".mjs");
+const input = readFileSync(`./${inputFileName}.txt`, { encoding: "utf8" });
 
 // separate stackLines and movesLines
 const [stackData, movesData] = input.split("\n\n");
