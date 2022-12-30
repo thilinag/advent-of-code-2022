@@ -125,11 +125,11 @@ const move = (elves, turnsLimit) => {
     turn++;
   }
 
-  return elvesPositions;
+  return { elvesPositions, turn };
 };
 
 const part1 = (turnsLimit) => {
-  const elvesPositions = move(elves, turnsLimit);
+  const { elvesPositions } = move(elves, turnsLimit);
 
   // find row, column min. max
   const rowNumbers = [...elvesPositions].map((elf) =>
@@ -154,7 +154,9 @@ const part1 = (turnsLimit) => {
 };
 
 const part2 = () => {
-  console.log();
+  const { turn } = move(elves, Infinity);
+  // What is the number of the first round where no Elf moves?
+  console.log(turn);
 };
 
 console.time("part1");
