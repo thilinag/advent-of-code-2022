@@ -105,5 +105,9 @@ const part2 = (data) => {
   }
 };
 
+console.time("part1");
 part1(data);
+console.timeEnd("part1");
+console.time("part2");
 part2(data);
+console.timeEnd("part2");

@@ -88,5 +88,9 @@ const part2 = (knots) => {
   console.log(getUniqueTailPositions(knots));
 };
 
+console.time("part1");
 part1(2);
+console.timeEnd("part1");
+console.time("part2");
 part2(10);
+console.timeEnd("part2");

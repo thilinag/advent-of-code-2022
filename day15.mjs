@@ -70,15 +70,13 @@ const part2 = (data, min, max) => {
       continue;
     }
 
-    console.log(line);
+    // console.log(line);
   }
 };
 
 console.time("part1");
-// part1(data, 2000000);
-part1(data, 10);
+part1(data, 2000000);
 console.timeEnd("part1");
 console.time("part2");
-// part2(data, 0, 4000000);
-part2(data, 0, 20);
+part2(data, 0, 4000000);
 console.timeEnd("part2");

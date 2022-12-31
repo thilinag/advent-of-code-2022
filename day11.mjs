@@ -143,5 +143,9 @@ const part2 = (rounds) => {
   console.log(getMonkeyBusuness(monkeys));
 };
 
+console.time("part1");
 part1(20);
+console.timeEnd("part1");
+console.time("part2");
 part2(10000);
+console.timeEnd("part2");
