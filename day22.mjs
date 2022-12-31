@@ -11,7 +11,6 @@ const solidWalls = new Set();
 const rowLimits = {};
 const colLimits = {};
 mapData.split("\n").map((line, rowIndex) => {
-  if (rowIndex === 157) console.log(line, line.length);
   return line.split("").forEach((d, colIndex) => {
     if (d === "#") {
       solidWalls.add(`${rowIndex},${colIndex}`);
