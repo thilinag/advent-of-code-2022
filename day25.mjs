@@ -59,13 +59,6 @@ const part1 = (data) => {
   console.log(getSnafu(sum));
 };
 
-const part2 = () => {
-  console.log();
-};
-
 console.time("part1");
 part1(data);
 console.timeEnd("part1");
-console.time("part2");
-part2();
-console.timeEnd("part2");
