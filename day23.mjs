@@ -128,8 +128,8 @@ const move = (elves, turnsLimit) => {
   return { elvesPositions, turn };
 };
 
-const part1 = (turnsLimit) => {
-  const { elvesPositions } = move(elves, turnsLimit);
+const part1 = () => {
+  const { elvesPositions } = move(elves, 10);
 
   // find row, column min. max
   const rowNumbers = [...elvesPositions].map((elf) =>
@@ -160,7 +160,7 @@ const part2 = () => {
 };
 
 console.time("part1");
-part1(10);
+part1();
 console.timeEnd("part1");
 console.time("part2");
 part2();
